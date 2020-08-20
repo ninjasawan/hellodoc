@@ -1,25 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { lazy } from "react";
+import { Switch, Route } from "react-router-dom";
+import { useApp } from "hooks";
+const Home = lazy(() => import("pages/Home"));
+const IssueDetails = lazy(() => import("pages/IssueDetails"));
+const NotFound = lazy(() => import("pages/NotFound"));
+const AppLoader = lazy(() => import("components/AppLoader"));
 
 function App() {
+  const { loading } = useApp();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Switch>
+        <Route exact path="/">
+          <Home />
+        </Route>
+        <Route exact path="/issues/:id">
+          <IssueDetails />
+        </Route>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+      <AppLoader isLoading={loading} />
+    </>
   );
 }
 
